@@ -78,8 +78,14 @@ class FastGradientMethod(Attack):
         self.set_params(**kwargs)
         adv_x = x.copy()
 
+        # Start progress bar
+        self.start_progress_bar(int(np.ceil(adv_x.shape[0] / float(self.batch_size))))
+
         # Compute perturbation with implicit batching
         for batch_id in range(int(np.ceil(adv_x.shape[0] / float(self.batch_size)))):
+            # Update progress bar
+            self.update_progress_bar(batch_id)
+
             batch_index_1, batch_index_2 = batch_id * self.batch_size, (batch_id + 1) * self.batch_size
             batch = adv_x[batch_index_1:batch_index_2]
             batch_labels = y[batch_index_1:batch_index_2]

@@ -107,9 +107,15 @@ class UniversalPerturbation(Attack):
         pred_y = self.classifier.predict(x, logits=False)
         pred_y_max = np.argmax(pred_y, axis=1)
 
+        # Start progress bar
+        self.start_progress_bar(None)
+
         # Start to generate the adversarial examples
         nb_iter = 0
         while fooling_rate < 1. - self.delta and nb_iter < self.max_iter:
+            # Update progress bar
+            self.update_progress_bar(nb_iter)
+
             # Go through all the examples randomly
             rnd_idx = random.sample(range(nb_instances), nb_instances)
 

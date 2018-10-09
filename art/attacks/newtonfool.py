@@ -67,8 +67,13 @@ class NewtonFool(Attack):
         y_pred = self.classifier.predict(x, logits=False)
         pred_class = np.argmax(y_pred, axis=1)
 
+        # Start progress bar
+        self.start_progress_bar(x.shape[0])
+
         # Main algorithm for each example
         for j, ex in enumerate(x_adv):
+            # Update progress bar
+            self.update_progress_bar(j)
             norm_x0 = np.linalg.norm(np.reshape(ex, [-1]))
             l = pred_class[j]
 

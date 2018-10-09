@@ -85,8 +85,14 @@ class SaliencyMapMethod(Attack):
         else:
             targets = np.argmax(kwargs[str('y')], axis=1)
 
+        # Start progress bar
+        self.start_progress_bar(x.shape[0])
+
         # Generate the adversarial samples
         for ind, val in enumerate(x_adv):
+            # Update progress bar
+            self.update_progress_bar(ind)
+
             # Initialize the search space; optimize to remove features that can't be changed
             if self.theta > 0:
                 search_space = set([i for i in range(self._nb_features) if val[i] < clip_max])

@@ -76,7 +76,12 @@ class VirtualAdversarialMethod(Attack):
         preds = self.classifier.predict(x_adv, logits=False)
         tol = 1e-10
 
+        # start progress bar
+        self.start_progress_bar( x.shape[0] )
+
         for ind, val in enumerate(x_adv):
+            # update progress bar
+            self.update_progress_bar( ind )
             d = np.random.randn(*dims)
 
             for _ in range(self.max_iter):

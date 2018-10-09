@@ -19,7 +19,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import abc
 import sys
-
+from keras.utils import Progbar
 
 # Ensure compatibility with Python 2 and 3 when using ABCMeta
 if sys.version_info >= (3, 4):
@@ -54,6 +54,43 @@ class Attack(ABC):
         :rtype: `np.ndarray`
         """
         raise NotImplementedError
+
+    def start_progress_bar(self, target, width=30, verbose=1, interval=0.05, stateful_metrics=None):
+        """
+        Creates the progress bar that can be used during generating adversarial examples.
+
+
+        :param target: Total number of steps expected, None if unknown.
+        :type x: `int`
+        :param width: Progress bar width on screen.
+        :type width: `int`
+        :param verbose: Verbosity mode, 0 (silent), 1 (verbose), 2 (semi-verbose)
+        :type width: `int`
+        :param interval: Minimum visual progress update interval (in seconds).
+        :type interval: `float`
+        :type width: `int`
+        :param stateful_metrics: Iterable of string names of metrics that
+            should *not* be averaged over time. Metrics in this list
+            will be displayed as-is. All others will be averaged
+            by the progbar before display.
+        :param stateful_metrics: `list[str]`
+        """
+        self.prog_bar = Progbar(target, width, verbose, interval, stateful_metrics)
+
+    def update_progress_bar(self, current, values=None):
+        """
+        Updates the progress bar.
+
+        :param current: Index of current step.
+        :type current: `int`
+        :param values: List of tuples:
+                    `(name, value_for_last_step)`.
+                    If `name` is in `stateful_metrics`,
+                    `value_for_last_step` will be displayed as-is.
+                    Else, an average of the metric over time will be displayed.
+        :type values: `list`
+        """
+        self.prog_bar.update(current, values)
 
     def set_params(self, **kwargs):
         """

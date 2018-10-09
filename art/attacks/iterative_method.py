@@ -101,7 +101,12 @@ class BasicIterativeMethod(FastGradientMethod):
             targets = kwargs['y']
         target_labels = np.argmax(targets, axis=1)
 
+        # Start progress bar
+        self.start_progress_bar(self.max_iter)
+
         for i in range(self.max_iter):
+            # Update progress bar
+            self.update_progress_bar(i)
             # Adversarial crafting
             adv_x = self._compute(adv_x, targets, self.eps_step, self.random_init and i == 0)
             

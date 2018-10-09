@@ -68,7 +68,13 @@ class DeepFool(Attack):
         # Pick a small scalar to avoid division by 0
         tol = 10e-8
 
+        # Start progress bar
+        self.start_progress_bar(x.shape[0])
+
         for j, val in enumerate(x_adv):
+            # Update progress bar
+            self.update_progress_bar(j)
+
             xj = val[None, ...]
 
             # TODO move prediction outside of for loop; add batching if `x` is too large?
